@@ -31,13 +31,23 @@ var context = canvas.getContext("2d");
 var W = canvas.width  = window.innerWidth-6;
 var H = canvas.height = window.innerHeight-50;
 
+function sendGetRequest(xhr, url, objects) {
+    xhr.open("GET", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(null);
+}
 
 function sendJSONXMLHTTPRequest(url, objects, callback) {
     var xhr = new XMLHttpRequest();
+    if(callback ==="sendGetRequest"){
+        console.log("YES")
+        sendGetRequest(xhr, url, objects);
+    }
     xhr.onreadystatechange = function () {
         if (xhr.readyState==4) {
             try {
                 if (xhr.status==200) {
+                    alert("Status 200");
                     //XXX: parse some JSON from the request!
                     //XXX: Pass the data to the callback!
                 }
@@ -263,12 +273,18 @@ mouse.mousedraggers.push(function(x,y,clicked,e) {
 function update() {
     //XXX: TODO Get the world from the webservice using a XMLHTTPRequest
     drawFrame();
+    // world = "\'{'a':{'x':1, 'y':2}, 'b':{'x':2, 'y':3}\'"
+
+    world = {'a':{'x':1, 'y':2}, 'b':{'x':2, 'y':3}}
+
+    base_url = "http://127.0.0.1:5000/"
+    path = ""
+    url = base_url+path
+    sendJSONXMLHTTPRequest(base_url, world, "sendGetRequest")
 }
 
 // 30 frames per second
 setInterval( update, 1000/30.0);
-
-
 
     </script>
 </body>
